@@ -45,11 +45,6 @@ public class Renamer {
     }
     
     public static void main(String args[]){
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new AppUI();
-            }
-        });
+        javax.swing.SwingUtilities.invokeLater(AppUI::new);
     }
 }

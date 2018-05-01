@@ -18,7 +18,6 @@ public class CustomListRenderer extends DefaultListCellRenderer {
     
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean hasFocus) {
-        System.out.println("!!!"); //todo: del
         
         if (value instanceof CustomListElement) {
             CustomListElement listElement = (CustomListElement) value;

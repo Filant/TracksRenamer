@@ -11,11 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import ru.feel.ui.CustomListElement;
 import ru.feel.ui.CustomListModel;
@@ -44,7 +41,6 @@ public class AppUI extends JFrame{
     public AppUI (){
         super("TrueRenamer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setPreferredSize(new Dimension(700, 400));
         setResizable(true);
         rootPanel.setLayout(new GridBagLayout());
         getContentPane().add(rootPanel);
@@ -54,8 +50,7 @@ public class AppUI extends JFrame{
         progressBar.setMinimum(0);
         progressBar.setValue(0);
         progressBar.setMaximum(100);
-        
-        
+
         chooseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -121,12 +116,12 @@ public class AppUI extends JFrame{
                     public void actionPerformed(ActionEvent e) {
                         if(cashRootFiles.size() > 1){
                             cashRootFiles.remove(cashRootFiles.size() - 1);
-                            String backRoot = ToWholePath(cashRootFiles);
-                            String[] rootStr = new File(backRoot).list();
+                            String backDir = ToWholePath(cashRootFiles);
+                            String[] rootStr = new File(backDir).list();
                             CustomListModel backRootModel = new CustomListModel();
 
                             for (String str : rootStr) {
-                                File checkForHidden = new File (backRoot + "\\" + str);
+                                File checkForHidden = new File (backDir + "\\" + str);
                                 if(!checkForHidden.isHidden()){
                                     if(checkForHidden.isDirectory()){
                                         backRootModel.addElement(new CustomListElement(str, folderIcon));
@@ -136,6 +131,10 @@ public class AppUI extends JFrame{
                                 }               
                             }
                             filesList.setModel(backRootModel);                                                              
+                        }else{
+                            File discs[] = File.listRoots();
+                            cashRootFiles.removeAll(cashRootFiles);
+                            filesList.setListData(discs);
                         }
                     }
                 });
@@ -182,17 +181,14 @@ public class AppUI extends JFrame{
                 List<File> filesToRenameList = new ArrayList<>();
                 for(int i = 0; i < model.getSize(); i++)
                     filesToRenameList.add(new File(model.getElementAt(i).toString()));
-                
-                
+                             
                 progressBar.setStringPainted(true);
                 progressBar.setMinimum(0);
                 progressBar.setValue(0);
                 progressBar.setMaximum(100);              
-                InAudio inA = new InAudio(filesToRenameList);
-                
+                InAudio inA = new InAudio(filesToRenameList);            
                 inA.setJProgress(progressBar);
-                inA.start();
-                                   
+                inA.start();                                
             }
         });
         
@@ -216,9 +212,7 @@ public class AppUI extends JFrame{
     public String ToWholePath (List<String> file){
         String listPart = "";
         for(String str : file)
-            listPart = listPart + str;
-            
-        return listPart;
-        
+            listPart = listPart + str;            
+        return listPart;        
     }
 }

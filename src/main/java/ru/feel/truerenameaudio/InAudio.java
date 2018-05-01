@@ -7,7 +7,6 @@ package ru.feel.truerenameaudio;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -19,12 +18,9 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.id3.ID3v1Tag;
-import org.jaudiotagger.tag.id3.ID3v23Tag;
 
 /**
  *
@@ -36,9 +32,6 @@ public class InAudio extends Thread{
     private String filePath;
     int progress = 0;
     private JProgressBar jProgress;
-
-   
-    
     
     public InAudio(List<File> listAudioFiles, String filePath){
         this.tracks = listAudioFiles;
@@ -55,8 +48,7 @@ public class InAudio extends Thread{
     @Override
     public void run() {        
       
-        this.Rename();
-     
+        this.Rename();    
     }
     
     public void Rename() {
@@ -67,10 +59,7 @@ public class InAudio extends Thread{
         String trackName = null;
         String encod = null;
         String thisFilePath = null;
-        Tag tag;
-        
-        
-        
+        Tag tag;    
         
         for(int i = 0; i < tracks.size(); i++){
             setProgress(i+1);
@@ -82,8 +71,7 @@ public class InAudio extends Thread{
                 Logger.getLogger(InAudio.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            tag = enyF.getTag();
-            
+            tag = enyF.getTag();            
             if(tag == null) continue;
             
             thisFilePath = tracks.get(i).getParent();
@@ -98,10 +86,8 @@ public class InAudio extends Thread{
                     new File(thisFilePath + "\\" + artist + " - " + trackName + encod) :
                     new File(thisFilePath + "\\" + albumArtist + " - " + trackName + encod);
                 tracks.get(i).renameTo(newName);               
-            }else{
-                
-                if(!trackName.isEmpty()){
-                    
+            }else{               
+                if(!trackName.isEmpty()){                   
                     File newName = new File(thisFilePath + "\\" + trackName + encod);
                     tracks.get(i).renameTo(newName);
                 }else{
@@ -154,7 +140,5 @@ public class InAudio extends Thread{
 
     public void setJProgress(JProgressBar jProgress) {
         this.jProgress = jProgress;
-    }
-    
-    
+    }      
 }
